@@ -1,0 +1,127 @@
+import Juegos.*
+//INICIO JUEGOS
+const sonic2 = new Juego(pais="arg",precio=500, contieneViolencia=true,contieneLenguajeInapropiado=true,contieneTematicaDeAdulto=true,pagaPorCritica=true)
+const sonic = new Juego(pais=chile,precio=70, contieneViolencia=true,contieneLenguajeInapropiado=true,contieneTematicaDeAdulto=true,pagaPorCritica=true)
+const mario = new Juego(pais=china,precio=30, contieneViolencia=true,contieneLenguajeInapropiado=true,contieneTematicaDeAdulto=true,pagaPorCritica=false)
+const crash = new Juego(pais=chile,precio=30, contieneViolencia=true,contieneLenguajeInapropiado=true,contieneTematicaDeAdulto=true,pagaPorCritica=false)
+const sonic3 = new Juego(pais=china,precio=200, contieneViolencia=true,contieneLenguajeInapropiado=true,contieneTematicaDeAdulto=false,pagaPorCritica=false)
+const sonicRetro= new JuegoRetro(pais=chile,precio=190,descuentoPorMalosGraficos=30,contieneViolencia=true,contieneLenguajeInapropiado=true,contieneTematicaDeAdulto=true,pagaPorCritica=false)
+//PAISES
+const chile = new Pais(equivalenteADolar=942,violenciaEsAptaMenores=false,tematicaAdultoEsAptoMenores=false,lenguajeInapropiadoEsAptoMenores=false)
+const china = new Pais(equivalenteADolar=7,violenciaEsAptaMenores=true,tematicaAdultoEsAptoMenores=false,lenguajeInapropiadoEsAptoMenores=true)
+//CRITICOS
+const raul = new CriticoUsuario(votoPositivo=true)
+const ruben = new CriticoUsuario(votoPositivo=true)
+const alberto = new CriticoPago(votoPositivo=false)
+const roberto = new CriticoPago(votoPositivo=false)
+const jack = new CriticoRevista(votoPositivo=true)
+
+
+
+//TESTS
+
+test "el precio de Sonic con descuento fijo "{
+	assert.equals(35,sonic.descuentoFijo(50))
+	assert.equals(40,sonic.descuentoFijo(30))
+}
+
+test "el precio de Sonic con descuento Directo"{
+	assert.equals(35,sonic.descuentoDirecto(50))
+}
+
+test "el juego mas caro es sonic2 "{
+
+	estim.agregarJuego(sonic2)
+	estim.agregarJuego(sonic3)
+	estim.agregarJuego(crash)
+	estim.agregarJuego(mario)
+	
+	assert.equals(sonic2,estim.juegoMasCaro())
+}
+
+test "juegosQueSuperan3Cuartos"{
+	estim.agregarJuego(sonic2)
+	estim.agregarJuego(sonic3)
+	estim.agregarJuego(crash)
+	estim.agregarJuego(mario)
+	
+	assert.equals([sonic2],estim.juegosQueSuperan3Cuartos())
+}
+
+test "Precios de juegos descuento especial(3cuartos)"{
+assert.equals(35,sonic.descuentoEspecial(50))
+assert.equals(1,sonic.descuentoEspecial(99))
+
+}
+
+test " DescuentoEspecialX"{
+	
+	estim.agregarJuego(sonic2)
+	estim.agregarJuego(sonic3)
+	estim.agregarJuego(crash)
+	estim.agregarJuego(mario)
+	
+	assert.equals([250],estim.descuentoEspecialx(50))
+	
+}
+
+test "Descuento Por malos graficos"{
+	estim.agregarJuego(sonicRetro)
+	assert.equals(65,sonicRetro.descuentoDirecto(50))
+}
+
+
+test "Precio de Crash en chile"{
+	estim.agregarJuego(crash)
+	assert.equals(28260,chile.precioEnEstePais(crash))
+	
+}
+test "Crash NO es apto para menores en chile"{
+	estim.agregarJuego(crash)
+	assert.notThat(chile.esJuegoAptoMenores(crash))
+	}
+	
+test "Promedio precio para menores en chile"{
+	estim.agregarJuego(crash)
+	estim.agregarJuego(sonicRetro)
+	estim.agregarJuego(sonic)
+	assert.equals(96,estim.promedioPrecioParaMenoresEn(chile))
+}
+
+test "En china es apto para menores la violencia y lenguaje inapropiado"{
+	
+	estim.agregarJuego(sonic3)
+	assert.that(china.esJuegoAptoMenores(sonic3))
+	}
+	
+
+
+test "Roberto vota negativo al juego mario, pero cambia de idea cuando le pagan"{
+	
+	assert.notThat(roberto.votoPositivo(mario))
+   	roberto.recibirPagoDe(mario)
+	assert.that(roberto.votoPositivo(mario))
+}
+
+test "Mario es juego galardonado"{
+	
+	mario.recibirCritica(ruben)
+	mario.recibirCritica(raul)
+	assert.that(mario.esJuegoGalardonado())
+}
+
+
+test "Juegos de chile"{
+	estim.agregarJuego(crash)
+	estim.agregarJuego(sonicRetro)
+	estim.agregarJuego(sonic)
+	
+	assert.equals([crash,sonicRetro,sonic],estim.juegosDePais(chile))
+}
+
+test "Precio total de juegos de China"{
+	estim.agregarJuego(mario)
+	estim.agregarJuego(sonic3)
+	assert.equals(230,estim.precioTotalDeJuegosDe(china))
+}
+
